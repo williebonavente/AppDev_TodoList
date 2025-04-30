@@ -1,47 +1,61 @@
 ﻿@model IEnumerable<TodoList.Models.TodoItem>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "To-Do List";
 }
 
-<h1>Index</h1>
+<h1>To-Do List</h1>
+
+<form asp-controller="ToDoItems" asp-action="Index" method="get" class="form-check-inline mb-3">
+    <select name="categoryFilter" class="form-control me-2">
+        <option value="">All Categories</option>
+
+        @foreach (var cat in ViewBag.Categories as List<string>)
+        {
+            var isSelected = cat.ToString() == ViewData["CategoryFilter"]?.ToString() ? "selected" : null; 
+            <option value="@cat" selected=@isSelected>@cat</option>
+        }
+    </select>
+
+    <select name="priorityFilter" class="form-control me-2">
+        <option value="">All Priorities</option>
+        @foreach (var p in ViewBag.Priorities as List<int>)
+        {
+            var selected = p.ToString() == ViewData["PriorityFilter"]?.ToString() ? "selected" : null; 
+            <option value="@p" selected="@selected">@p</option>
+        }
+    </select>
+
+    <select name="sortOrder" class="form-control me-2">
+        <option value"">Sort by Title</option>
+        <option value="priority_asc" selected=@(ViewData["CurrentSort"]?.ToString() == "priority_asc" ? "selected" : "")> Priority ↑ </option>
+        <option value="priority_desc" selected=@(ViewData["CurrentSort"]?.ToString() == "priority_desc" ? "selected" : "")> Priority ↓ </option>
+    </select>
+
+    <input type="submit" value="Apply" class="btn btn-primary" />
+</form>
+
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">Add New To-Do</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsCompleted)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Priority)
-            </th>
-            <th></th>
-        </tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Priority</th>
+            <th>Completed</th>
+            <th>Actions</th>
+           </tr> 
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsCompleted)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Priority)
-            </td>
+           <td>@item.Title</td> 
+           <td>@item.Category</td> 
+           <td>@item.Priority</td> 
+           <td>@item.IsCompleted</td> 
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
