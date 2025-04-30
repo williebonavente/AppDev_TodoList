@@ -183,5 +183,20 @@ namespace TodoList.Controllers
         {
             return _context.ToDoItems.Any(e => e.Id == id);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleComplete(int id)
+        {
+            var item = await _context.ToDoItems.FindAsync(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            item.IsCompleted = !item.IsCompleted;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

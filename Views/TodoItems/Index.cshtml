@@ -52,10 +52,17 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-           <td>@item.Title</td> 
+           <td style="@(item.IsCompleted ?"text-decoration: line-through; color: gray;" : "")">
+               @item.Title
+           </td> 
            <td>@item.Category</td> 
            <td>@item.Priority</td> 
-           <td>@item.IsCompleted</td> 
+           <td>
+               <form asp-action="ToggleComplete" method="post" style="display:inline;">
+                   <input type="hidden" name="id" value="@item.Id" />
+                   <input type="checkbox" onchange="this.form.submit()" @(item.IsCompleted ? "checked" : "") />
+               </form>
+           </td> 
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
