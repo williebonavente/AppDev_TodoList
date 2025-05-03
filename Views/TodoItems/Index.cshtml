@@ -13,6 +13,7 @@
 
 <h1>To-Do List</h1>
 
+@* filter Button  *@
 <form asp-controller="ToDoItems" asp-action="Index" method="get" class="form-check-inline mb-3">
     <select name="categoryFilter" class="form-control me-2">
         <option value="">All Categories</option>
@@ -32,7 +33,7 @@
             <option value="@p" selected="@selected">@p</option>
         }
     </select>
-
+@* Sorting *@
     <select name="sortOrder" class="form-control me-2">
         <option value"">Sort by Title</option>
         <option value="priority_asc" selected=@(ViewData["CurrentSort"]?.ToString() == "priority_asc" ? "selected" : "")> Priority ↑ </option>

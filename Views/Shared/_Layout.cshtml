@@ -7,6 +7,22 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TodoList.styles.css" asp-append-version="true" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.conifg = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            light: "#d8b4fe",
+                            DEFAULT: "#a855f7",
+                            dark: "#6b21a8"
+                        },
+                    },
+                },
+            },
+        }
+    </script>
 </head>
 <body>
     <header>
