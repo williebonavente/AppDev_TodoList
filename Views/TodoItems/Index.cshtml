@@ -6,8 +6,8 @@
 
 <style>
     .completed {
-        text-decoration: line-through;
-        color: violet;
+    text-decoration: line-through;
+    color: violet;
     }
 </style>
 
@@ -33,7 +33,7 @@
             <option value="@p" selected="@selected">@p</option>
         }
     </select>
-@* Sorting *@
+    @* Sorting *@
     <select name="sortOrder" class="form-control me-2">
         <option value"">Sort by Title</option>
         <option value="priority_asc" selected=@(ViewData["CurrentSort"]?.ToString() == "priority_asc" ? "selected" : "")> Priority ↑ </option>
@@ -44,43 +44,49 @@
 </form>
 
 
-<p>
-    <a asp-action="Create" class="btn btn-success">Add New To-Do</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Priority</th>
-            <th>Completed</th>
-            <th>Actions</th>
-           </tr> 
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td class="todo-title @(item.IsCompleted ? "completed" :"")" data-id="@item.Id">
-                @item.Title
-            </td>
-           <td>@item.Category</td> 
-           <td>@item.Priority</td> 
-           <td>
-               <form asp-action="ToggleComplete" method="post" style="display:inline;">
-                   <input type="hidden" name="id" value="@item.Id" />
-                   @* <input type="checkbox" onchange="this.form.submit()" @(item.IsCompleted ? "checked" : "") /> *@
-                   <input type="checkbox" class="toggle-complete" data-id="@item.Id" @(item.IsCompleted ? "checked" : "") />
-               </form>
-           </td> 
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="min-h-screen bg-gradient-to-r from-purple-200 via-purple-100 to-purple-200 p-8">
+
+    <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl p-6">
+        <h1 class="text-3xl font-bold text-primary-dark mb-4">My To-Do List</h1>
+
+    <div class="flex justify-between items-center mb-4">
+        <a asp-action="Create" 
+        class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg shadow">
+            + Add New Task
+        </a>
+    </div>
+
+    <table class="w-full table-auto border-collapse">
+        <thead>
+            <tr class="bg-primary-light text-left text-white">
+                <th class="p-3 text-black">Task</th>
+                <th class="p-3 text-black">Category</th>
+                <th class="p-3 text-black">Priority</th>
+                <th class="p-3 text-black">Completed</th>
+                <th class="p-3 text-black">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="border-b hover:bg-purple-50">
+                    <td class="p-3 todo-title @(item.IsCompleted ? "completed" : "")" data-id="@item.Id">@item.Title</td>
+                    <td class="p-3">@item.Category</td>
+                    <td class="p-3">@item.Priority</td>
+                    <td class="p-3">
+                        <input type="checkbox" class="toggle-complete" data-id="@item.Id" @(item.IsCompleted ? "checked" : "") />
+                    </td>
+                    <td class="p-3">
+                         <a asp-action="Edit" asp-route-id="@item.Id" class="text-blue-600 hover:underline mr-2">Edit</a>
+                         <a asp-action="Delete" asp-route-id="@item.Id" class="text-red-600 hover:underline mr-2">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+</div>
 
 
 @section Scripts {
