@@ -185,18 +185,19 @@ namespace TodoList.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ToggleComplete(int id)
+        // Inserting Ajax Script
+        public async Task<IActionResult> ToggleCompleteAjax([FromBody] int id)
         {
             var item = await _context.ToDoItems.FindAsync(id);
             if (item == null)
             {
-                return NotFound();
+                return Json(new { success = false });
             }
 
             item.IsCompleted = !item.IsCompleted;
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+            return Json(new { success = true, isCompleted = item.IsCompleted });
         }
     }
 }

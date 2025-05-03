@@ -4,6 +4,13 @@
     ViewData["Title"] = "To-Do List";
 }
 
+<style>
+    .completed {
+        text-decoration: line-through;
+        color: violet;
+    }
+</style>
+
 <h1>To-Do List</h1>
 
 <form asp-controller="ToDoItems" asp-action="Index" method="get" class="form-check-inline mb-3">
@@ -52,15 +59,16 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-           <td style="@(item.IsCompleted ?"text-decoration: line-through; color: gray;" : "")">
-               @item.Title
-           </td> 
+            <td class="todo-title @(item.IsCompleted ? "completed" :"")" data-id="@item.Id">
+                @item.Title
+            </td>
            <td>@item.Category</td> 
            <td>@item.Priority</td> 
            <td>
                <form asp-action="ToggleComplete" method="post" style="display:inline;">
                    <input type="hidden" name="id" value="@item.Id" />
-                   <input type="checkbox" onchange="this.form.submit()" @(item.IsCompleted ? "checked" : "") />
+                   @* <input type="checkbox" onchange="this.form.submit()" @(item.IsCompleted ? "checked" : "") /> *@
+                   <input type="checkbox" class="toggle-complete" data-id="@item.Id" @(item.IsCompleted ? "checked" : "") />
                </form>
            </td> 
             <td>
@@ -72,3 +80,34 @@
 }
     </tbody>
 </table>
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function () {
+            $(".toggle-complete").change(function () {
+                const checkbox = $(this);
+                const id = checkbox.data("id");
+            $.ajax({
+                url:'@Url.Action("ToggleCompleteAjax", "ToDoItems")',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(id),
+                success: function (response) {
+                    if (response.success) {
+                        const titleCell = $(".todo-title[data-id='" + id  + "']");
+                        if (response.isCompleted) {
+                            titleCell.addClass("completed");
+                        } else {
+                            titleCell.removeClass("completed");
+                        }
+                    } else {
+                        alert("Something went wrong.");
+                    }
+                }
+            });
+           });
+        });
+    </script>
+}
