@@ -86,12 +86,24 @@
         </tbody>
     </table>
     </div>
+@* Toast Notification *@
 </div>
 
-
 @section Scripts {
+    <div id="toast" class="fixed top-6 right-6 bg-gradient-to-r from-purple-500 to-purple-700 text-white
+            font-semibold px-6 py-3 rounded-lg shadow-lg hidden z-50 transition-all duration-500"></div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        function showToast(messge) {
+            const toast = $(`#toast`);
+            toast.text(message).removeClass("hidden").addClass("opacity-100");
+
+            setTimeout(() => {
+                toast.addClass("opacity-0");
+                setTimeout(() => toast.addClass("hidden").removeClass("opacity-0"), 300);
+            }, 2000);
+        }
+
         $(function () {
             $(".toggle-complete").change(function () {
                 const checkbox = $(this);
@@ -106,11 +118,13 @@
                         const titleCell = $(".todo-title[data-id='" + id  + "']");
                         if (response.isCompleted) {
                             titleCell.addClass("completed");
+                            showToast(" Task marked complete!");
                         } else {
                             titleCell.removeClass("completed");
+                            showToast(" Task marked incomplete.");
                         }
                     } else {
-                        alert("Something went wrong.");
+                        showToast(" Something went wrong");
                     }
                 }
             });
