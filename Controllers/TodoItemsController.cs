@@ -19,14 +19,14 @@ namespace TodoList.Controllers
         }
 
         // GET: TodoItems
-        public async Task<IActionResult> Index(string categoryFilter, int? priorityFilter, string sortOrder)
+        public async Task<IActionResult> Index(string categoryFilter, Priority priorityFilter, string sortOrder)
         {
             ViewData["CategoryFilter"] = categoryFilter;
             ViewData["PriorityFilter"] = priorityFilter;
             ViewData["CurrentSort"] = sortOrder;
             ViewData["PrioritySortParam"] = sortOrder == "priority_desc" ? "priority_asc" : "priority_desc";
 
-            var items = from t in _context.ToDoItems select t;
+            var items = _context.ToDoItems.AsQueryable();
 
             // Filtering
             if (!string.IsNullOrEmpty(categoryFilter))
@@ -34,7 +34,7 @@ namespace TodoList.Controllers
                 items = items.Where(t => t.Category == categoryFilter);
             }
 
-            if (priorityFilter != null )
+            if (priorityFilter != default)
             {
                 items = items.Where(t => t.Priority == priorityFilter);
             }
@@ -42,15 +42,14 @@ namespace TodoList.Controllers
             // Sorting
             items = sortOrder switch
             {
-                "priority_desc" => items.OrderByDescending(t => t.Priority),
-                "priority_asc" => items.OrderBy(t => t.Priority),
+                "priority_desc" => items.OrderByDescending(t => (int) t.Priority),
+                "priority_asc" => items.OrderBy(t => (int) t.Priority),
                 _ => items.OrderBy(t => t.Title)
             };
 
             // Get distinct categories and priorities for dropdowns
             ViewBag.Categories = await _context.ToDoItems.Select(t => t.Category).Distinct().ToListAsync();
-            ViewBag.Priorities = await _context.ToDoItems.Select(t => t.Priority).Distinct().ToListAsync();
-
+            ViewBag.Priorities = Enum.GetValues(typeof(Priority)).Cast<Priority>().ToList();
             return View(await items.ToListAsync());
 
         }
@@ -90,6 +89,8 @@ namespace TodoList.Controllers
             {
                 _context.Add(todoItem);
                 await _context.SaveChangesAsync();
+                // Toast Message
+                TempData["ToastMessage"] = "Task created successfully";
                 return RedirectToAction(nameof(Index));
             }
             return View(todoItem);
@@ -128,6 +129,7 @@ namespace TodoList.Controllers
                 try
                 {
                     _context.Update(todoItem);
+                    TempData["ToastMessage"] = "Task edited successfully";
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -173,6 +175,7 @@ namespace TodoList.Controllers
             if (todoItem != null)
             {
                 _context.ToDoItems.Remove(todoItem);
+                TempData["ToastMessage"] = " Task deleted successfully";
             }
 
             await _context.SaveChangesAsync();

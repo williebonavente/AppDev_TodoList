@@ -11,8 +11,6 @@ namespace TodoList.Models
         [Required]
         public required string Category { get; set; }
 
-        [Range(1, 5)]
-        public int Priority { get; set; } // 1 = highest, 5 = lowest 
-
+        public Priority Priority { get; set; } 
     }
 }

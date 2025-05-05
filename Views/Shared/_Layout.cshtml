@@ -53,15 +53,18 @@
             @RenderBody()
         </main>
     </div>
+    @* Toast Notification *@
+    <div id="toast" class="fixed top-6 right-6 bg-gradient-to-r from-purple-500 to-purple-700 text-white 
+            font-semibold px-6 py-3 rounded-lg shadow-lg hidden z-50 transition-all duration-500"></div>
 
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2025 - TodoList - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
     </body>
 </html>
