@@ -42,8 +42,10 @@ namespace TodoList.Controllers
             // Sorting
             items = sortOrder switch
             {
-                "priority_desc" => items.OrderByDescending(t => (int) t.Priority),
-                "priority_asc" => items.OrderBy(t => (int) t.Priority),
+                "PriorityDesc" => items.OrderByDescending(t => (int) t.Priority),
+                "PriorityAsc" => items.OrderBy(t => (int) t.Priority),
+                "CategoryAsc" => items.OrderBy(t => t.Category),
+                "CategoryDesc" => items.OrderByDescending(t => t.Category),
                 _ => items.OrderBy(t => t.Title)
             };
 

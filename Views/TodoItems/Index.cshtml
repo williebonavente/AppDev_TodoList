@@ -5,8 +5,6 @@
     var selectedCategory = ViewData["CategoryFilter"] as string;
     var selectedPriority = ViewData["PriorityFilter"] as Priority?;
 }
-<p>Selected Category: @selectedCategory</p>
-<p>Selected Priority: @selectedPriority</p>
 <style>
     .completed {
     text-decoration: line-through;
@@ -53,15 +51,16 @@
 
      @*Sort Filter*@
      <div>
-         <label for="sortOrder" class="block text-sm font-semibold text-purple-700 mb-1">Sort By</label>
-         <select name="sortOrder" id="sortOrder" class="w-48 px-4 py-2 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white">
-             <option value="">Default</option>
-             <option value="PriorityAsc">Priority Ascending</option>
-             <option value="PriorityDesc">Priority Descending</option>
-             <option value="CategoryAsc">Cateogry Ascending</option>
-             <option value="CategoryDesc">Category Descending</option>
-         </select>
-    </div>
+    <label for="sortOrder" class="block text-sm font-semibold text-purple-700 mb-1">Sort By</label>
+    <select name="sortOrder" id="sortOrder" class="w-48 px-4 py-2 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white">
+        <!option value="" @(ViewData["CurrentSort"]?.ToString() == "" ? "selected" : "")>Default</!option>
+            <!option value="PriorityAsc" @(ViewData["CurrentSort"]?.ToString() == "PriorityAsc" ? "selected" : "")>Priority ↑</!option>
+            <!option value="PriorityDesc" @(ViewData["CurrentSort"]?.ToString() == "PriorityDesc" ? "selected" : "")> Priority ↓
+            </!option>
+            <!option value="CategoryAsc" @(ViewData["CurrentSort"]?.ToString() == "CategoryAsc" ? "selected" : "")>Category ↑</!option>
+            <!option value="CategoryDesc" @(ViewData["CurrentSort"]?.ToString() == "CategoryDesc" ? "selected" : "")>Category ↓</!option>
+    </select>
+</div>
 
 	@* Filter Button *@
     <div class="pt-1">
