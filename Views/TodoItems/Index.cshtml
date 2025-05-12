@@ -2,10 +2,11 @@
 
 @{
     ViewData["Title"] = "To-Do List";
-    var selectedCategory = ViewData["CategoryFilter"]?.ToString();
-    var selectedPriority = ViewData["PriorityFilter"]?.ToString();
+    var selectedCategory = ViewData["CategoryFilter"] as string;
+    var selectedPriority = ViewData["PriorityFilter"] as Priority?;
 }
-
+<p>Selected Category: @selectedCategory</p>
+<p>Selected Priority: @selectedPriority</p>
 <style>
     .completed {
     text-decoration: line-through;
@@ -23,30 +24,31 @@
         <label for="category" class="block text-sm font-semibold text-purple-700 mb-1">Category</label>
         <select name="categoryFilter" id="category" class="w-48 px-4 py-2 border border-purple-300 rounded-md 
                     focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white">
-            <option value="">All Categories</option>
-            @foreach (var c in ViewBag.Categories as List<string>)
+            <option value="" select=@(string.IsNullOrEmpty(selectedCategory) ? "selected" : "")>All Categories</option>
+            @if (ViewBag.Categories != null)
             {
-                <option value="@c" selected= "@(c.ToString() == selectedCategory ? "selected" : "")">@c</option>
+                foreach (var c in ViewBag.Categories)
+                {
+                    <option value="@c" select="@(c == selectedCategory ?  "selected": "")">@c</option>
+                }
             }
         </select>
     </div>
 
-
-    @*Priority Filter*@
+    @* Priority Filter *@
     <div>
-        <label for="priority" class="block text=sm font-semibold text-purple-700 mb-1">Priority</label>
+        <label for="priority" class="block text-sm font-semibold text-purple-700 mb-1">Priority</label>
         <select name="priorityFilter" id="priority" class="w-48 px-4 py-2 border border-purple-300 
-                rounded-md focus:outlined-lg-none focus:ring-2 focus:ring-purple-500 bg-white">
-            <option value="">All Priorities</option>
-
+                rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white">
+            <option value="" select=@(selectedPriority == null ? "selected" : "")>All Priorities</option> 
             @foreach (Priority p in Enum.GetValues(typeof(Priority)))
             {
-                <option value="@p" selected="@(p.ToString() == selectedCategory ? "selected" : "")">@p</option>
+                <option value="" select="@(selectedPriority == p ? "selected" : "")">@p</option>
+
             }
         </select>
-     </div>
-
-
+    </div>
+     @* TODO Search functionality *@
      @* Insert Searchbox too if can*@
 
      @*Sort Filter*@
@@ -143,7 +145,7 @@
                             showToast(" Task marked complete!");
                         } else {
                             titleCell.removeClass("completed");
-                            showToast(" Task marked incomplete.");
+                            showToast(" Task marked incomplete.");string
                         }
                     } else {
                         showToast(" Something went wrong");

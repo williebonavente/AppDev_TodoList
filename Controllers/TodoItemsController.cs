@@ -19,7 +19,7 @@ namespace TodoList.Controllers
         }
 
         // GET: TodoItems
-        public async Task<IActionResult> Index(string categoryFilter, Priority priorityFilter, string sortOrder)
+        public async Task<IActionResult> Index(string categoryFilter, Priority? priorityFilter, string sortOrder)
         {
             ViewData["CategoryFilter"] = categoryFilter;
             ViewData["PriorityFilter"] = priorityFilter;
@@ -34,9 +34,9 @@ namespace TodoList.Controllers
                 items = items.Where(t => t.Category == categoryFilter);
             }
 
-            if (priorityFilter != default)
+            if (priorityFilter.HasValue)
             {
-                items = items.Where(t => t.Priority == priorityFilter);
+                items = items.Where(t => t.Priority == priorityFilter.Value);
             }
 
             // Sorting
@@ -50,6 +50,8 @@ namespace TodoList.Controllers
             // Get distinct categories and priorities for dropdowns
             ViewBag.Categories = await _context.ToDoItems.Select(t => t.Category).Distinct().ToListAsync();
             ViewBag.Priorities = Enum.GetValues(typeof(Priority)).Cast<Priority>().ToList();
+            Console.WriteLine($"PriorityFilter: {ViewData["PriorityFilter"]}");
+            Console.WriteLine($"CategoryFilter: {ViewData["CategoryFilter"]}");
             return View(await items.ToListAsync());
 
         }
