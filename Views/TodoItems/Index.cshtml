@@ -24,7 +24,7 @@
         <select name="categoryFilter" id="category" class="w-48 px-4 py-2 border border-purple-300 rounded-md 
                     focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white">
             <option value="">All Categories</option>
-            @foreach (var c in ViewBag.Categories as List<Priority>)
+            @foreach (var c in ViewBag.Categories as List<string>)
             {
                 <option value="@c" selected= "@(c.ToString() == selectedCategory ? "selected" : "")">@c</option>
             }
@@ -68,41 +68,6 @@
         </button>
     </div>
 </form>
-
-
-
-
-@* filter Button  *@
-<form asp-controller="ToDoItems" asp-action="Index" method="get" class="form-check-inline mb-3">
-    <select name="categoryFilter" class="form-control me-2">
-        <option value="">All Categories</option>
-
-        @foreach (var cat in ViewBag.Categories as List<string>)
-        {
-            var isSelected = cat.ToString() == ViewData["CategoryFilter"]?.ToString() ? "selected" : null; 
-            <option value="@cat" selected=@isSelected>@cat</option>
-        }
-    </select>
-
-    <select name="priorityFilter" class="form-control me-2">
-        <option value="">All Priorities</option>
-        @foreach (var p in ViewBag.Priorities as List<Priority>)
-        {
-            var selected = p.ToString() == ViewData["PriorityFilter"]?.ToString() ? "selected" : null; 
-            <option value="@p" selected="@selected">@p</option>
-        }
-    </select>
-    @* Sorting *@
-    <select name="sortOrder" class="form-control me-2">
-        <option value"">Sort by Title</option>
-        <option value="priority_asc" selected=@(ViewData["CurrentSort"]?.ToString() == "priority_asc" ? "selected" : "")> Priority ↑ </option>
-        <option value="priority_desc" selected=@(ViewData["CurrentSort"]?.ToString() == "priority_desc" ? "selected" : "")> Priority ↓ </option>
-    </select>
-
-    <input type="submit" value="Apply" class="btn btn-primary" />
-</form>
-
-
 
 <div class="min-h-screen bg-gradient-to-r from-purple-200 via-purple-100 to-purple-200 p-8">
 

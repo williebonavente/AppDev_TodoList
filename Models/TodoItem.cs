@@ -7,10 +7,8 @@ namespace TodoList.Models
         [Required]
         public required string Title { get; set; }
         public bool IsCompleted { get; set;}
-
         [Required]
         public required string Category { get; set; }
-
         public Priority Priority { get; set; } 
     }
 }
