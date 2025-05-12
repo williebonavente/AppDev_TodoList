@@ -46,8 +46,7 @@
             }
         </select>
     </div>
-     @* TODO Search functionality *@
-     @* Insert Searchbox too if can*@
+
 
      @*Sort Filter*@
      <div>
@@ -62,11 +61,29 @@
     </select>
 </div>
 
+
 	@* Filter Button *@
     <div class="pt-1">
         <button type="submit" class="mt-4 bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded-lg transition">
             Filter 
         </button>
+    </div>
+
+    @* Search Box*@
+    <div class="ml-auto">
+        <label for="searchQuery" class="block text-sm font-semibold text-purple-700 mb-1"></label> 
+        <div class="relative">
+	        <input type="text" name="searchQuery" id="searchQuery" value="@ViewData["SearchQuery"]"
+                   class="min-w-[12rem] max-w-xs w-full px-5 py-2 pr-10 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white truncate"
+                   placeholder="Search tasks..."/>
+            <div class="absolute left-2 top-2.5 text-purple-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                     viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 103.5 3.5a7.5 7.5 0 0013.15 13.15z" />
+                </svg>
+            </div>
+         </div>
     </div>
 </form>
 
@@ -74,12 +91,12 @@
 
     <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl p-6">
         <h1 class="text-3xl font-bold text-primary-dark mb-4">My To-Do List</h1>
-
     <div class="flex justify-between items-center mb-4">
         <a asp-action="Create" 
         class="bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg shadow">
             + Add New Task
         </a>
+
     </div>
 
     <table class="w-full table-auto border-collapse">
@@ -89,7 +106,8 @@
                 <th class="p-3 text-black">Category</th>
                 <th class="p-3 text-black">Priority</th>
                 <th class="p-3 text-black">Completed</th>
-                <th class="p-3 text-black">Actions</th>
+                <th class="p-3 pr-4 text-black">Actions</th>
+
             </tr>
         </thead>
 
@@ -99,11 +117,29 @@
                 <tr class="border-b hover:bg-purple-50">
                     <td class="p-3 todo-title @(item.IsCompleted ? "completed" : "")" data-id="@item.Id">@item.Title</td>
                     <td class="p-3">@item.Category</td>
-                    <td class="p-3">@item.Priority </td>
                     <td class="p-3">
-                        <input type="checkbox" class="toggle-complete" data-id="@item.Id" @(item.IsCompleted ? "checked" : "") />
+                            @switch (item.Priority)
+                            {
+                                case Priority.Low:
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">Low</span>
+                                    break;
+                                case Priority.Medium:
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-700">Medium</span>
+                                    break;
+                                case Priority.High:
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold bg-orange-100 text-orange-700">High</span>
+                                    break;
+                                case Priority.Critical:
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-700">Critical</span>
+                                    break;
+                            }
+
                     </td>
-                    <td class="p-3">
+                    <td class="p-3 pr-12"> 
+                         <input type="checkbox" class="toggle-complete ml-8" data-id="@item.Id" @(item.IsCompleted ? "checked" : "") /> 
+                     </td>
+               
+                     <td class="p-3">
                          <a asp-action="Edit" asp-route-id="@item.Id" class="text-blue-600 hover:underline mr-2">Edit</a>
                          <a asp-action="Delete" asp-route-id="@item.Id" class="text-red-600 hover:underline mr-2">Delete</a>
                     </td>
