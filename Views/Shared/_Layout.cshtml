@@ -23,8 +23,29 @@
             },
         }
     </script>
+
+    <style>
+        @@keyframes gradientBackground {
+            0%, 100%
+
+        {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        }
+
+        .animated-purple-bg {
+            background: linear-gradient(-45deg, #a78bfa, #c084fc, #e9d5ff, #d8b4fe);
+            background-size: 300% 300%;
+            animation: gradientBackground 15s ease infinite;
+        }
+    </style>
 </head>
-<body>
+<body class="animated-purple-bg white min-h-screen">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -63,7 +84,6 @@
     @await RenderSectionAsync("Scripts", required: false)
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2025 - TodoList - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     </body>
